@@ -1,18 +1,22 @@
 package com.mycompany.calculater;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Locale;
+import java.util.Scanner;
 import javax.xml.*;
 
 
 public class Main {
 
 
-    public static void main(String[] args) throws NoSuchAlgorithmException {
+    public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
 
 
         ImageIcon image = new ImageIcon("src/com/company/icon1.png");
@@ -142,7 +146,6 @@ public class Main {
             }
             else if (n == 3) {
                 String[] machine_option = {"MD5 Encryption", "SHA-256 Encryption", "Go Back"};
-
                 String select_option = (String) JOptionPane.showInputDialog(null, "Choose please!",
                         "Cryptography", 1, image, machine_option, machine_option[0]);
 
@@ -154,20 +157,40 @@ public class Main {
                     String text = JOptionPane.showInputDialog("Encrypting text : ");
                     JOptionPane.showMessageDialog(null,  "Hash value: "+sha256Encryption(text));
                     System.out.println(sha256Encryption(text));
+
                 }else if(select_option.equals("Go Back") ){
                     continue;
                 }
 
-            } else if (n == 4)
-            {
+            }
+            else if (n == 4) {
+                String[] machine_option = {"MD5 Decryption", "SHA-256 Decryption", "Go Back"};
+                String select_option = (String) JOptionPane.showInputDialog(null, "Choose please!",
+                        "Cryptography", 1, image, machine_option, machine_option[0]);
+
+                if(select_option.equals("MD5 Decryption")){
+                    String text = JOptionPane.showInputDialog("Encrypting text : ");
+                    JOptionPane.showMessageDialog(null,  "Decrypt: "+md5Decryption(text));
+
+                }else if(select_option.equals("SHA-256 Decryption")){
+                    String text = JOptionPane.showInputDialog("Encrypting text : ");
+                    JOptionPane.showMessageDialog(null,  "Decrypt: "+sha256Decryption(text));
+
+                }else if(select_option.equals("Go Back")){
+                    continue;
+                }
+            }
+            else if (n == 5) {
                 flag = false;
-            } else {
+            }
+            else {
                 break;
             }
         }
 
 
     }
+
 
 
     public static Double calculator(Double num1, Double num2, String operate) {
@@ -245,11 +268,63 @@ public class Main {
         String passHash = new BigInteger(1, m.digest()).toString(16);
         return passHash;
     }
+
     public static String sha256Encryption(String input) throws NoSuchAlgorithmException {
 
         MessageDigest m = MessageDigest.getInstance("SHA-256");
         m.update(input.getBytes(), 0, input.length());
         String passHash = new BigInteger(1, m.digest()).toString(16);
         return passHash;
+    }
+
+    private static String md5Decryption(String input) throws IOException, NoSuchAlgorithmException {
+
+        String data = "";
+        File file = new File("password.txt");
+        Scanner scanFile = new Scanner(file);
+
+        String pass = "";
+        while (scanFile.hasNext()) {
+
+            pass = scanFile.nextLine();
+            String encryptPass = md5Encryption(pass);
+
+            if (encryptPass.equals(input)) {
+                data += pass + "," + encryptPass + "," + "MD5" + "\n";
+                break;
+            }
+        }
+
+        FileWriter writer = new FileWriter("data.txt");
+        writer.append(data);
+        writer.close();
+
+
+        return pass;
+    }
+
+    private static String sha256Decryption(String input) throws IOException, NoSuchAlgorithmException {
+
+        File file = new File("password.txt");
+        Scanner scanFile = new Scanner(file);
+
+        String data = "";
+        String pass = "";
+        while(scanFile.hasNext()){
+            pass = scanFile.nextLine();
+            String encryptPass = sha256Encryption(pass);
+
+            if(input.equals(encryptPass)){
+                data += pass + "," + encryptPass + "," + "sha256";
+                break;
+            }
+        }
+
+        FileWriter writer = new FileWriter("data.txt");
+        writer.append(data);
+        writer.close();
+
+        return pass;
+
     }
 }
