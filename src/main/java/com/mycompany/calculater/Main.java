@@ -5,18 +5,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigInteger;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Locale;
 import java.util.Scanner;
-import javax.xml.*;
+import java.util.concurrent.TimeUnit;
 
 
 public class Main {
 
 
     public static void main(String[] args) throws NoSuchAlgorithmException, IOException {
+
 
 
         ImageIcon image = new ImageIcon("src/com/company/icon1.png");
@@ -35,7 +34,7 @@ public class Main {
 
             int n = JOptionPane.showOptionDialog(null,
                     "Choose your type converter!",
-                    "A Silly Question", 0, JOptionPane.QUESTION_MESSAGE,
+                    "A Silly Question", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,
                     null, options, options[5]);
 
 
@@ -43,7 +42,8 @@ public class Main {
                 String[] cal_option = {"Calculator", "Square root", "Power", "Go Back"};
 
                 String select_option = (String) JOptionPane.showInputDialog(null, "Choose please!",
-                        "Calculator", 1, image, cal_option, cal_option[0]);
+                        "Calculator", JOptionPane.INFORMATION_MESSAGE, image, cal_option, cal_option[0]);
+
 
                 System.out.println(select_option);
                 if (select_option.equals("Calculator")) {
@@ -59,7 +59,7 @@ public class Main {
                 } else if (select_option.equals("Square root")) {
                     String number = JOptionPane.showInputDialog("please Enter Number to find a square root : ");
                     Double intNumber = Double.parseDouble(number);
-                    JOptionPane.showMessageDialog(null, "Result : " + SquerRoot(intNumber));
+                    JOptionPane.showMessageDialog(null, "Result : " + SquarerRoot(intNumber));
 
                 } else if (select_option.equals("Power")) {
                     String base = JOptionPane.showInputDialog("Enter base ");
@@ -68,8 +68,6 @@ public class Main {
                     int powInt = Integer.parseInt(pow);
                     JOptionPane.showMessageDialog(null, "Result: " + power(baseInt, powInt));
 
-                } else if (select_option.equals("Go Back")) {
-                    continue;
                 }
 
             }
@@ -77,7 +75,7 @@ public class Main {
                 String[] unit_option = {"Km to Meter", "Meter to Km", "Meter to CM", "CM to Meter", "Celsius To Fahrenheit", "Fahrenheit To Celsius", "Go Back"};
 
                 String select_option = (String) JOptionPane.showInputDialog(null, "Choose please!",
-                        "Unit", 1, image, unit_option, unit_option[0]);
+                        "Unit", JOptionPane.INFORMATION_MESSAGE, image, unit_option, unit_option[0]);
 
                 if (select_option.equals("Km to Meter")) {
                     String number = JOptionPane.showInputDialog("converting Km to Meter : ");
@@ -110,8 +108,6 @@ public class Main {
                     double DoubleDegree = Double.parseDouble(degree);
                     JOptionPane.showMessageDialog(null, "Degree = " + FtoC(DoubleDegree) + "°C");
 
-                } else if (select_option.equals("Go Back")) {
-                    continue;
                 }
 
 
@@ -120,7 +116,7 @@ public class Main {
                 String[] machine_option = {"Number to Binary", "Binary to Number", "Number to Hexadecimal", "Hexadecimal to Number", "Go Back"};
 
                 String select_option = (String) JOptionPane.showInputDialog(null, "Choose please!",
-                        "Unit", 1, image, machine_option, machine_option[0]);
+                        "Unit", JOptionPane.INFORMATION_MESSAGE, image, machine_option, machine_option[0]);
 
                 if (select_option.equals("Number to Binary")) {
                     String number = JOptionPane.showInputDialog("pleas Enter a number for Converting to Binary: ");
@@ -140,14 +136,12 @@ public class Main {
                     String number = JOptionPane.showInputDialog("Converting Hexadecimal to Number: ");
                     JOptionPane.showMessageDialog(null, "Result : " + HexToInt(number));
 
-                } else if (select_option.equals("Go Back")) {
-                    continue;
                 }
             }
             else if (n == 3) {
                 String[] machine_option = {"MD5 Encryption", "SHA-256 Encryption", "Go Back"};
                 String select_option = (String) JOptionPane.showInputDialog(null, "Choose please!",
-                        "Cryptography", 1, image, machine_option, machine_option[0]);
+                        "Cryptography", JOptionPane.INFORMATION_MESSAGE, image, machine_option, machine_option[0]);
 
                 if(select_option.equals("MD5 Encryption")){
                     String text = JOptionPane.showInputDialog("Encrypting text : ");
@@ -158,26 +152,36 @@ public class Main {
                     JOptionPane.showMessageDialog(null,  "Hash value: "+sha256Encryption(text));
                     System.out.println(sha256Encryption(text));
 
-                }else if(select_option.equals("Go Back") ){
-                    continue;
                 }
 
             }
             else if (n == 4) {
                 String[] machine_option = {"MD5 Decryption", "SHA-256 Decryption", "Go Back"};
                 String select_option = (String) JOptionPane.showInputDialog(null, "Choose please!",
-                        "Cryptography", 1, image, machine_option, machine_option[0]);
+                        "Cryptography", JOptionPane.INFORMATION_MESSAGE, image, machine_option, machine_option[0]);
 
                 if(select_option.equals("MD5 Decryption")){
-                    String text = JOptionPane.showInputDialog("Encrypting text : ");
-                    JOptionPane.showMessageDialog(null,  "Decrypt: "+md5Decryption(text));
+                    String text = JOptionPane.showInputDialog("Decryption text : ");
+                    long start = System.nanoTime();
+                    String result = md5Decryption(text);
+                    long end = System.nanoTime();
+
+                    long elapsedTime = (end - start);
+                    long second = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+                    JOptionPane.showMessageDialog(null,  "Decrypt: "+result + "      |Total time:"+ second + " second");
+
 
                 }else if(select_option.equals("SHA-256 Decryption")){
-                    String text = JOptionPane.showInputDialog("Encrypting text : ");
-                    JOptionPane.showMessageDialog(null,  "Decrypt: "+sha256Decryption(text));
+                    String text = JOptionPane.showInputDialog("Decryption text : ");
+                    long start = System.nanoTime();
+                    String result = sha256Decryption(text);
+                    long end = System.nanoTime();
 
-                }else if(select_option.equals("Go Back")){
-                    continue;
+                    long elapsedTime = (end - start);
+                    long second = TimeUnit.SECONDS.convert(elapsedTime, TimeUnit.NANOSECONDS);
+                    JOptionPane.showMessageDialog(null,  "Decrypt: "+result + "      |Total time:"+ second + " second");
+
+
                 }
             }
             else if (n == 5) {
@@ -194,20 +198,13 @@ public class Main {
 
 
     public static Double calculator(Double num1, Double num2, String operate) {
-        if (operate.equals("+")) {
-            return num1 + num2;
-
-        } else if (operate.equals("-")) {
-            return num1 - num2;
-
-        } else if (operate.equals("*")) {
-            return num1 * num2;
-
-        } else if (operate.equals("/")) {
-            return num1 / num2;
-        } else {
-            return null;
-        }
+        return switch (operate) {
+            case "+" -> num1 + num2;
+            case "-" -> num1 - num2;
+            case "*" -> num1 * num2;
+            case "/" -> num1 / num2;
+            default -> null;
+        };
 
     }
 
@@ -215,7 +212,7 @@ public class Main {
         return Math.pow(base, pow);
     }
 
-    public static Double SquerRoot(Double sqrt) {
+    public static Double SquarerRoot(Double sqrt) {
         return Math.sqrt(sqrt);
     }
 
@@ -283,7 +280,7 @@ public class Main {
         File file = new File("password.txt");
         Scanner scanFile = new Scanner(file);
 
-        String pass = "";
+        String pass;
         while (scanFile.hasNext()) {
 
             pass = scanFile.nextLine();
@@ -291,16 +288,15 @@ public class Main {
 
             if (encryptPass.equals(input)) {
                 data += pass + "," + encryptPass + "," + "MD5" + "\n";
-                break;
+                FileWriter writer = new FileWriter("data.txt");
+                writer.append(data);
+                writer.close();
+                return pass;
+
             }
         }
 
-        FileWriter writer = new FileWriter("data.txt");
-        writer.append(data);
-        writer.close();
-
-
-        return pass;
+        return "password isn't in wordlist!";
     }
 
     private static String sha256Decryption(String input) throws IOException, NoSuchAlgorithmException {
@@ -309,22 +305,23 @@ public class Main {
         Scanner scanFile = new Scanner(file);
 
         String data = "";
-        String pass = "";
+        String pass ;
         while(scanFile.hasNext()){
             pass = scanFile.nextLine();
             String encryptPass = sha256Encryption(pass);
 
             if(input.equals(encryptPass)){
-                data += pass + "," + encryptPass + "," + "sha256";
-                break;
+                data += pass + "," + encryptPass + "," + "sha256\n";
+                System.out.println(data);
+                FileWriter writer = new FileWriter("data.txt");
+                writer.append(data);
+                writer.close();
+                return pass;
+
             }
         }
 
-        FileWriter writer = new FileWriter("data.txt");
-        writer.append(data);
-        writer.close();
-
-        return pass;
+        return "password isn't in wordlist!";
 
     }
 }
